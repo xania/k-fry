@@ -1,3 +1,4 @@
+git reset --hard
 git pull
 cd kassa
-pnpm i && npm start
+npx pnpm i && npm start

@@ -1,0 +1,4 @@
+{
+  "npm.packageManager": "pnpm",
+  "stylelint.packageManager": "pnpm"
+}

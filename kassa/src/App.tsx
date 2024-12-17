@@ -1,7 +1,17 @@
 import type { Accessor, Component } from "solid-js";
-import { BiRegularPlus, BiRegularX as Remove } from "solid-icons/bi";
-import { createSelector, createSignal, For } from "solid-js";
-import { OrderModel, RadioModel } from "./models/order";
+import {
+  BiRegularMinus,
+  BiRegularPlus,
+  BiRegularX as Remove,
+} from "solid-icons/bi";
+import {
+  createEffect,
+  createSelector,
+  createSignal,
+  For,
+  Show,
+} from "solid-js";
+import { CounterModel, OrderModel, RadioModel } from "./models/order";
 
 // const initialOrder: OrderModel = {
 //   description: "Burger",
@@ -23,6 +33,7 @@ function addItem(cat: CategoryModel) {
     count: 1,
     description: cat.name,
     checkbox: {},
+    counters: {},
     radio: {},
     unitPrice: cat.price,
   };
@@ -54,101 +65,130 @@ const menuCategories: CategoryModel[] = [
   { name: "Boneless chicken", price: 5.95 },
   { name: "Hotwings", price: 5.95 },
   // { name: "Kipstuk (3x)", price: 5 },
+  { name: "Menu dranken", price: 1 },
 ];
 
 const bowlsCategory: CategoryModel = { name: "Bowls", price: 5.45 };
-const drinksCategory: CategoryModel = { name: "Koude dranken", price: 1 };
+const freeChoiceCategory: CategoryModel = { name: "Free Choice", price: 0 };
 
 const App: Component = () => {
   return (
-    <div class="h-full flex flex-col">
-      <div class="flex p-3 gap-4">
-        {menuCategories.map((cat) => (
-          <Category model={cat}></Category>
-        ))}
-        <Category model={bowlsCategory}></Category>
-        <Category model={drinksCategory}></Category>
-        <span class="flex-1"></span>
-        <button
-          onclick={() => {
-            setItems([]);
-            setSelectedOrder(undefined);
-          }}
-        >
-          clear
-        </button>
-        <Totals />
+    <div class="h-full flex">
+      <div class="h-full flex-1 flex flex-col">
+        <div class="flex p-3 gap-4">
+          {menuCategories.map((cat) => (
+            <Category model={cat}></Category>
+          ))}
+          <Category model={bowlsCategory}></Category>
+          <Category model={freeChoiceCategory}></Category>
+          <span class="flex-1"></span>
+          <button
+            class="mx-4 border border-slate-300 px-2 rounded-lg"
+            onclick={() => {
+              setItems([]);
+              setSelectedOrder(undefined);
+            }}
+          >
+            CLEAR
+          </button>
+        </div>
+        <div class="border-white box-border flex overflow-hidden h-full">
+          <div class="p-4 w-72 shadow-2xl overflow-auto">
+            <For each={items()}>
+              {(item, index) => (
+                // rendering logic for each element
+                <Order model={item} index={index}></Order>
+              )}
+            </For>
+          </div>
+          <div
+            class="flex h-full flex-1 overflow-auto"
+            classList={{ hidden: !selectedOrder() }}
+          >
+            <Bar categories={[...menuCategories, bowlsCategory]}>
+              <Card>
+                <Header>American style</Header>
+                <Options
+                  name="saus"
+                  items={[
+                    { title: "Kentucky style", price: 0 },
+                    { title: "Nashville style", price: 0 },
+                  ]}
+                ></Options>
+              </Card>
+              <Card>
+                <Header>Korean style</Header>
+                <Options
+                  name="saus"
+                  items={[
+                    { title: "Gochujang", price: 1 },
+                    { title: "Honey Lemon", price: 1 },
+                    { title: "Soy Garlic", price: 1 },
+                  ]}
+                ></Options>
+              </Card>
+            </Bar>
+            <Bar categories={[...menuCategories, bowlsCategory]}>
+              <Card>
+                <Header>Friet</Header>
+                <Options
+                  name="friet"
+                  items={[
+                    { title: "Normaal", price: 2.5 },
+                    { title: "Zoete Aardappelen", price: 3 },
+                  ]}
+                ></Options>
+              </Card>
+              <Card>
+                <Header>Saus</Header>
+                <Checkbox title="Mayo" price={0.6} />
+                <Checkbox title="Ketchup" price={0.6} />
+                <Checkbox title="K-Fry" price={0.9} />
+                <Checkbox title="Mexican" price={0.9} />
+                <Checkbox title="Soy Garlic" price={0.9} />
+                <Checkbox title="Honey Lemon" price={0.9} />
+              </Card>
+            </Bar>
+            <Bar categories={[...menuCategories, bowlsCategory]}>
+              <Card>
+                <Header>Koude Dranken</Header>
+                <Checkbox title="Cola" price={1.5} />
+                <Checkbox title="Fernandes rood" price={1.5} />
+                <Checkbox title="Fernandes groen" price={1.5} />
+                <Checkbox title="Fernandes blauw" price={1.5} />
+                <Checkbox title="Redbul" price={2} />
+                <Checkbox title="Oasis Rood" price={1.5} />
+                <Checkbox title="Oasis Orange" price={1.5} />
+              </Card>
+            </Bar>
+            <Bar categories={[freeChoiceCategory]}>
+              <Card>
+                <Header>Saus</Header>
+                <Counter title="Mayo" price={0.6} />
+                <Counter title="Ketchup" price={0.6} />
+                <Counter title="K-Fry" price={0.9} />
+                <Counter title="Mexican" price={0.9} />
+                <Counter title="Soy Garlic" price={0.9} />
+                <Counter title="Honey Lemon" price={0.9} />
+              </Card>
+            </Bar>
+            <Bar categories={[freeChoiceCategory]}>
+              <Card>
+                <Header>Koude Dranken</Header>
+                <Counter title="Cola" price={2.5} />
+                <Counter title="Fernandes rood" price={2.5} />
+                <Counter title="Fernandes groen" price={2.5} />
+                <Counter title="Fernandes blauw" price={2.5} />
+                <Counter title="Redbul" price={3} />
+                <Counter title="Oasis Rood" price={2.5} />
+                <Counter title="Oasis Orange" price={2.5} />
+              </Card>
+            </Bar>
+          </div>
+        </div>
       </div>
-      <div class="border-white box-border flex overflow-hidden h-full">
-        <div class="p-4 w-72 shadow-2xl overflow-auto">
-          <For each={items()}>
-            {(item, index) => (
-              // rendering logic for each element
-              <Order model={item} index={index}></Order>
-            )}
-          </For>
-        </div>
-        <div
-          class="flex h-full flex-1 overflow-auto"
-          classList={{ hidden: !selectedOrder() }}
-        >
-          <Bar categories={[...menuCategories, bowlsCategory]}>
-            <Card>
-              <Header>American style</Header>
-              <Options
-                name="saus"
-                items={[
-                  { title: "Kentucky style", price: 0 },
-                  { title: "Nashville style", price: 0 },
-                ]}
-              ></Options>
-            </Card>
-            <Card>
-              <Header>Korean style</Header>
-              <Options
-                name="saus"
-                items={[
-                  { title: "Gochujang", price: 1 },
-                  { title: "Honey Lemon", price: 1 },
-                  { title: "Soy Garlic", price: 1 },
-                ]}
-              ></Options>
-            </Card>
-          </Bar>
-          <Bar categories={[...menuCategories, bowlsCategory]}>
-            <Card>
-              <Header>Friet</Header>
-              <Options
-                name="friet"
-                items={[
-                  { title: "Normaal", price: 2.5 },
-                  { title: "Zoete Aardappelen", price: 3 },
-                ]}
-              ></Options>
-            </Card>
-            <Card>
-              <Header>Saus</Header>
-              <Checkbox title="Mayo" price={0.6} />
-              <Checkbox title="Ketchup" price={0.6} />
-              <Checkbox title="K-Fry" price={0.9} />
-              <Checkbox title="Mexican" price={0.9} />
-              <Checkbox title="Soy Garlic" price={0.9} />
-              <Checkbox title="Honey Lemon" price={0.9} />
-            </Card>
-          </Bar>
-          <Bar categories={[...menuCategories, bowlsCategory, drinksCategory]}>
-            <Card>
-              <Header>Koude Dranken</Header>
-              <Checkbox title="Cola" price={1.5} />
-              <Checkbox title="Fernandes rood" price={1.5} />
-              <Checkbox title="Fernandes groen" price={1.5} />
-              <Checkbox title="Fernandes blauw" price={1.5} />
-              <Checkbox title="Redbul" price={2} />
-              <Checkbox title="Oasis Rood" price={1.5} />
-              <Checkbox title="Oasis Orange" price={1.5} />
-            </Card>
-          </Bar>
-        </div>
+      <div class="bg-slate-100 shadow-inner w-60">
+        <Totals />
       </div>
     </div>
   );
@@ -246,6 +286,52 @@ const Options: Component<OptionsProps> = (props) => {
   });
 };
 
+const Counter: Component<{ title: string; price: number }> = (props) => {
+  function incrementCount(n: number) {
+    const order = selectedOrder();
+    if (order) {
+      const model: CounterModel =
+        order.counters[props.title] ||
+        (order.counters[props.title] = {
+          count: 0,
+          unitPrice: props.price,
+        });
+      model.count += n;
+      refreshItems();
+    }
+  }
+
+  function getCount() {
+    const x = items();
+    const order = selectedOrder();
+    if (!order) {
+      return 0;
+    } else {
+      const model = order.counters[props.title];
+      return model?.count || 0;
+    }
+  }
+
+  const id = "_" + Math.random();
+  return (
+    <Label id={id}>
+      <button
+        class="flex-1 text-left text-sm "
+        onClick={() => incrementCount(1)}
+      >
+        {props.title}
+        <Show when={getCount() > 0}> ({getCount()})</Show>
+      </button>
+      <Show when={getCount() > 0}>
+        <BiRegularMinus
+          onClick={() => incrementCount(-1)}
+          class="text-red-400 w-5 h-5 rounded-full border-2 border-white shadow-md"
+        />
+      </Show>
+    </Label>
+  );
+};
+
 const Checkbox: Component<{ title: string; price: number }> = (props) => {
   function isChecked() {
     const order = selectedOrder();
@@ -321,28 +407,92 @@ function getOrderPrice(order: OrderModel) {
     resultPrice += r.price;
   }
 
+  for (const r of Object.values(order.counters)) {
+    resultPrice += r.count * r.unitPrice;
+  }
+
   return resultPrice;
 }
 
 const Totals: Component = () => {
   type Sum = { amount: number; tax: number };
   function totalAmount(): Sum {
-    return items().reduce<Sum>(
+    var sum = items().reduce<Sum>(
       (p, c) => ({
         amount: p.amount + getOrderPrice(c),
         tax: 1,
       }),
       { amount: 0, tax: 0 }
     );
+
+    return sum;
   }
 
+  const [pin, setPin] = createSignal(0);
+  const [cash, setCash] = createSignal(0);
+  const [remaining, setRemaining] = createSignal(0);
+
+  function updateCash(e: any) {
+    setCash(parseInt(e.target.value || 0));
+  }
+
+  function updatePin(e: any) {
+    setPin(parseInt(e.target.value || 0));
+  }
+
+  createEffect(() => {
+    const sum = totalAmount();
+    if (sum.amount == 0) {
+      setPin(0);
+      setCash(0);
+    }
+    setRemaining(sum.amount - pin() - cash());
+  });
+
   return (
-    <button
-      onclick={() => setItems((x) => [...x])}
-      class="bg-blue-950 p-2 shadow-xl rounded px-4 text-white"
-    >
-      &euro; {totalAmount().amount.toFixed(2)}
-    </button>
+    <>
+      <div class="flex m-2">
+        <button
+          onclick={() => setItems((x) => [...x])}
+          class="bg-blue-950 p-2 shadow-xl rounded px-4 text-white flex-1"
+        >
+          &euro; {totalAmount().amount.toFixed(2)}
+        </button>
+      </div>
+      <div class="p-2">
+        <span>Pin</span>
+        <label class="mb-4 inline-flex flex-1 w-full h-8 border border-blue-400 ">
+          <input
+            type="number"
+            placeholder="Pin"
+            class="flex-1 p-2"
+            value={pin() > 0 ? pin() : ""}
+            onKeyUp={updatePin}
+          ></input>
+        </label>
+        <span>Cash</span>
+        <label class="mb-4 inline-flex flex-1 w-full h-8 border border-blue-400 ">
+          <input
+            type="number"
+            placeholder="Cash"
+            class="flex-1 p-2"
+            value={cash() > 0 ? cash() : ""}
+            onKeyUp={updateCash}
+          ></input>
+        </label>
+
+        <span>Remaining</span>
+        <label class="mb-4 inline-flex flex-1 w-full h-8 border border-blue-400 ">
+          <input
+            readOnly={true}
+            type="number"
+            placeholder="Remaining"
+            class="flex-1 p-2 bg-slate-100"
+            value={remaining()}
+          ></input>
+        </label>
+      </div>
+    </>
   );
 };
 

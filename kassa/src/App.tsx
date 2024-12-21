@@ -163,6 +163,17 @@ const App: Component = () => {
             </Bar>
             <Bar categories={[freeChoiceCategory]}>
               <Card>
+                <Header>Snacks</Header>
+                <Counter title="Koolsla" price={2.5} />
+                <Counter title="Friet" price={3} />
+                <Counter title="Gekruide friet" price={3.5} />
+                <Counter title="Zoete aardappelen friet" price={4} />
+                <Counter title="3x Hotwings" price={3.25} />
+                <Counter title="3x Boneless" price={3.25} />
+              </Card>
+            </Bar>
+            <Bar categories={[freeChoiceCategory]}>
+              <Card>
                 <Header>Saus</Header>
                 <Counter title="Mayo" price={0.6} />
                 <Counter title="Ketchup" price={0.6} />

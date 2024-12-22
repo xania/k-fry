@@ -20,3 +20,8 @@ export interface CounterModel {
   count: number;
   unitPrice: number;
 }
+
+export type TransactionModel = {
+  id: string;
+  orders: OrderModel[];
+};

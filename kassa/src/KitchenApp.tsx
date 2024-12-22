@@ -1,11 +1,10 @@
 import { RouteSectionProps } from "@solidjs/router";
-import { createSignal, For, onCleanup, type Component } from "solid-js";
-import { OrderModel } from "./models/order";
+import { createSignal, For, onCleanup, Show, type Component } from "solid-js";
+import { OrderModel, TransactionModel } from "./models/order";
 import sound from "./assets/mixkit-small-group-cheer-and-applause-518.wav";
 
-type TransactionModel = {
-  orders: OrderModel[];
-};
+const [transactions, setTransactions] = createSignal<TransactionModel[]>([]);
+const [getAudio, setAudio] = createSignal<HTMLAudioElement | null>(null);
 
 function connectWebSocket() {
   // Dynamically create the WebSocket URL
@@ -15,25 +14,17 @@ function connectWebSocket() {
   const wsUrl = `${protocol}//${hostname}:${port}`;
 
   // Create a new WebSocket connection
-  return new WebSocket(wsUrl);
-}
-
-const KitchenApp: Component<RouteSectionProps<unknown>> = (props) => {
-  const [transactions, setTransactions] = createSignal<TransactionModel[]>([]);
-
-  const ws = connectWebSocket();
-
+  const ws = new WebSocket(wsUrl);
   ws.onopen = () => {
     console.log("WebSocket connected");
   };
 
   ws.onmessage = (event) => {
     const json = JSON.parse(event.data);
-    if (Array.isArray(json)) {
-      setTransactions((x) => [...x, { orders: json }]);
-
-      const audio = document.getElementById("myAudio") as HTMLAudioElement;
-      if (audio?.play) audio.play();
+    if (json instanceof Array) {
+      console.log(json);
+      setTransactions(json);
+      playAudio();
     }
   };
 
@@ -41,22 +32,64 @@ const KitchenApp: Component<RouteSectionProps<unknown>> = (props) => {
     console.error(event);
   };
 
+  return function () {
+    ws.close();
+  };
+}
+
+function enableAudio() {
+  const audio = new Audio(sound);
+  audio.load();
+  setAudio(audio);
+}
+
+function playAudio() {
+  const audio = getAudio();
+  if (audio)
+    audio.play().catch((error) => {
+      alert(error);
+    });
+}
+
+const KitchenApp: Component<RouteSectionProps<unknown>> = (props) => {
+  const disposeWebSocket = connectWebSocket();
+
   onCleanup(() => {
-    console.log("Cleaning up WebSocket");
+    disposeWebSocket();
   });
 
   return (
     <div>
       <h1>Kitchen</h1>
-      <audio id="myAudio" src={sound}></audio>
+
+      <Show when={!getAudio()}>
+        <button onClick={enableAudio}>Enable audio</button>
+      </Show>
 
       <For each={transactions()}>
-        {(item, index) => (
+        {(transaction, index) => (
           // rendering logic for each element
 
-          <div class="border border-slate-300 p-3">
-            {item.orders.map((x) => (
-              <div>{x.description}</div>
+          <div class="border border-slate-300 p-2 m-2 shadow-lg">
+            <button
+              class="border border-red-400 px-2 text-red-600"
+              onClick={() => closeTransaction(transaction.id)}
+            >
+              Close order
+            </button>
+
+            {transaction.orders.map((order) => (
+              <div class="border border-red-300 my-2">
+                <h1 class="p-1 bg-slate-600 text-white">{order.description}</h1>
+
+                <div class="flex flex-wrap ">
+                  {getOrderAttributes(order).map((attr) => (
+                    <span class="border rounded px-2 whitespace-nowrap">
+                      {attr}
+                    </span>
+                  ))}
+                </div>
+              </div>
             ))}
           </div>
         )}
@@ -64,5 +97,31 @@ const KitchenApp: Component<RouteSectionProps<unknown>> = (props) => {
     </div>
   );
 };
+
+function getOrderAttributes(order: OrderModel) {
+  const attrs: any[] = [];
+
+  for (const r of Object.keys(order.radio)) {
+    attrs.push(`${r}=${order.radio[r].title}`);
+  }
+
+  for (const r of Object.keys(order.checkbox)) {
+    attrs.push(r);
+  }
+
+  for (const r of Object.keys(order.counters)) {
+    const count = order.counters[r].count;
+    if (count > 0) attrs.push(`${r} X ${count}`);
+  }
+
+  return attrs;
+}
+
+function closeTransaction(trxId: string) {
+  fetch("/close", {
+    body: trxId,
+    method: "POST",
+  });
+}
 
 export default KitchenApp;

@@ -100,7 +100,7 @@ const PosApp: Component = () => {
               <Card>
                 <Header>American style</Header>
                 <Options
-                  name="saus"
+                  name="style"
                   items={[
                     { title: "Kentucky style", price: 0 },
                     { title: "Nashville style", price: 0 },
@@ -110,7 +110,7 @@ const PosApp: Component = () => {
               <Card>
                 <Header>Korean style</Header>
                 <Options
-                  name="saus"
+                  name="style"
                   items={[
                     { title: "Gochujang", price: 1 },
                     { title: "Honey Lemon", price: 1 },

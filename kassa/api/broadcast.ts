@@ -4,7 +4,7 @@ export interface BroadCaster {
   send(data: any): void;
 }
 
-export function start(port: number) {
+export function start(port: number, init: () => string) {
   const wss = new WebSocketServer({ port });
   console.log(`WebSocket server running on ws://192.168.1.213:${port}`);
 
@@ -13,8 +13,7 @@ export function start(port: number) {
   wss.on("connection", (ws) => {
     console.log("New client connected");
 
-    // Send a welcome message
-    ws.send(JSON.stringify({ message: "Welcome to WebSocket!" }));
+    ws.send(init());
 
     // Handle incoming messages
     ws.on("message", (message) => {
@@ -35,12 +34,12 @@ export function start(port: number) {
     arr.push(ws);
   });
 
-  return Promise.resolve({
+  return {
     send(data: any) {
       console.log("broadcast data", data);
       for (const ws of arr) {
         ws.send(data);
       }
     },
-  });
+  };
 }

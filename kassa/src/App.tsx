@@ -1,7 +1,7 @@
 import type { Accessor, Component } from "solid-js";
 import {
-  BiRegularMinus,
   BiRegularPlus,
+  BiSolidDownArrow,
   BiRegularX as Remove,
 } from "solid-icons/bi";
 import {
@@ -159,6 +159,7 @@ const App: Component = () => {
                 <Checkbox title="Redbul" price={2} />
                 <Checkbox title="Oasis Rood" price={1.5} />
                 <Checkbox title="Oasis Orange" price={1.5} />
+                <Checkbox title="Spa" price={1.5} />
               </Card>
             </Bar>
             <Bar categories={[freeChoiceCategory]}>
@@ -251,7 +252,7 @@ const Category: Component<{ model: CategoryModel }> = (props) => (
 const Label: Component<{ id: string; children: any }> = (props) => (
   <label
     for={props.id}
-    class="inline-flex w-full p-2 shadow cursor-pointer hover:text-blue-800"
+    class="inline-flex w-full p-2 shadow cursor-pointer hover:text-blue-800 text-sm"
   >
     {props.children}
   </label>
@@ -326,19 +327,21 @@ const Counter: Component<{ title: string; price: number }> = (props) => {
   const id = "_" + Math.random();
   return (
     <Label id={id}>
-      <button
-        class="flex-1 text-left text-sm "
-        onClick={() => incrementCount(1)}
-      >
+      <button class="flex-1 text-left" onClick={() => incrementCount(1)}>
         {props.title}
-        <Show when={getCount() > 0}> ({getCount()})</Show>
       </button>
-      <Show when={getCount() > 0}>
-        <BiRegularMinus
-          onClick={() => incrementCount(-1)}
-          class="text-red-400 w-5 h-5 rounded-full border-2 border-white shadow-md"
-        />
-      </Show>
+      <span class="mx-2">
+        <Show when={getCount() > 0}> ({getCount()})</Show>
+      </span>
+      <button
+        onClick={() => incrementCount(-1)}
+        classList={{
+          hidden: getCount() == 0,
+        }}
+        class="text-red-400 w-6 h-5 rounded-md border-2 border-red-200 shadow-md hidden"
+      >
+        <BiSolidDownArrow class="m-auto text-xs" />
+      </button>
     </Label>
   );
 };

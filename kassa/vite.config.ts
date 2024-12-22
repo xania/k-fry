@@ -10,7 +10,7 @@ export default defineConfig({
     For more info see https://github.com/thetarnav/solid-devtools/tree/main/packages/extension#readme
     */
     // devtools(),
-    viteBotPlugin(),
+    viteBotPlugin(function(req, res, next) { return next()}),
     solidPlugin(),
   ],
   server: {

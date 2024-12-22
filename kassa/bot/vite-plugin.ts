@@ -1,15 +1,23 @@
-import { ViteDevServer } from "vite";
+import { ViteDevServer, Connect } from "vite";
 
-import puppeteer from "puppeteer";
+type Middleware = {
+  route: string;
+  fn: Connect.NextHandleFunction
+}
 
-export function viteBotPlugin() {
+export function viteBotPlugin(...middlewares: Middleware[]) {
   return {
     name: "vite-plugin-http",
     configureServer(vite: ViteDevServer) {
       // Create an Express app
 
       // Set up the Express app to run on the Vite server
-      vite.middlewares.use(async (req, res, next) => {
+      for(const m of middlewares) {
+        vite.middlewares.use(m.route, async (req, res, next) => {
+          m.fn(req, res)
+      });
+      }
+      vite.middlewares.use("", async (req, res, next) => {
         // Use the Express app to handle HTTP requests
         const reqUrl = req.url || "";
 

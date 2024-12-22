@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      '@solidjs/router':
+        specifier: ^0.15.2
+        version: 0.15.2(solid-js@1.8.11)
       '@suid/icons-material':
         specifier: ^0.8.1
         version: 0.8.1(solid-js@1.8.11)
@@ -17,6 +20,9 @@ importers:
       '@suid/vite-plugin':
         specifier: ^0.3.1
         version: 0.3.1(vite@5.0.11(@types/node@22.10.1))
+      '@types/ws':
+        specifier: ^8.5.13
+        version: 8.5.13
       puppeteer:
         specifier: ^23.10.1
         version: 23.10.1(typescript@5.3.3)
@@ -26,6 +32,9 @@ importers:
       solid-js:
         specifier: ^1.8.11
         version: 1.8.11
+      ws:
+        specifier: ^8.18.0
+        version: 8.18.0
     devDependencies:
       '@types/node':
         specifier: ^22.10.1
@@ -622,6 +631,11 @@ packages:
     peerDependencies:
       solid-js: ^1.6.12
 
+  '@solidjs/router@0.15.2':
+    resolution: {integrity: sha512-UWtliRvOnjfYMONQcTGwtf6BEud5QlF0oHC5L+kcSGYn0jARH5KzC3+3LLZ0al7oQo/5Rc50ssMswPuAuxFvAA==}
+    peerDependencies:
+      solid-js: ^1.8.6
+
   '@suid/base@0.10.1':
     resolution: {integrity: sha512-zP9Ujdd/9AbZnn/kDMC+mMdBrE8i7U4q9sCKwGw3bLx0FQ+utPxRV+9NQ8KLb0q0W5yleAHfjP0nycBAmL+DHQ==}
     peerDependencies:
@@ -691,6 +705,9 @@ packages:
 
   '@types/node@22.10.1':
     resolution: {integrity: sha512-qKgsUwfHZV2WCWLAnVP1JqnpE6Im6h3Y0+fYgMTasNQ7V++CBX5OT1as0g0f+OyubbFqhf6XVNIsmN4IIhEgGQ==}
+
+  '@types/ws@8.5.13':
+    resolution: {integrity: sha512-osM/gWBTPKgHV8XkTunnegTRIsvF6owmf5w+JtAfOw472dptdm0dlGv4xCt6GwQRcC2XVOvvRE/0bAoQcL2QkA==}
 
   '@types/yauzl@2.10.3':
     resolution: {integrity: sha512-oJoftv0LSuaDZE3Le4DbKX+KS9G36NzOeSap90UIK0yMA/NhKJhqlSGtNDORNRaIbQfzjXDrQa0ytJ6mNRGz/Q==}
@@ -2234,6 +2251,10 @@ snapshots:
     dependencies:
       solid-js: 1.8.11
 
+  '@solidjs/router@0.15.2(solid-js@1.8.11)':
+    dependencies:
+      solid-js: 1.8.11
+
   '@suid/base@0.10.1(solid-js@1.8.11)':
     dependencies:
       '@popperjs/core': 2.11.8
@@ -2334,6 +2355,10 @@ snapshots:
   '@types/node@22.10.1':
     dependencies:
       undici-types: 6.20.0
+
+  '@types/ws@8.5.13':
+    dependencies:
+      '@types/node': 22.10.1
 
   '@types/yauzl@2.10.3':
     dependencies:

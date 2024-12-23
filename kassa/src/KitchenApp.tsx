@@ -2,7 +2,7 @@ import { RouteSectionProps } from "@solidjs/router";
 import { createSignal, For, onCleanup, Show, type Component } from "solid-js";
 import { OrderModel, TransactionModel } from "./models/order";
 import { createTimer } from "@solid-primitives/timer";
-import sound from "./assets/mixkit-small-group-cheer-and-applause-518.wav";
+import sound from "./assets/bell-98033.mp3";
 
 const [transactions, setTransactions] = createSignal<TransactionModel[]>([]);
 const [getAudio, setAudio] = createSignal<HTMLAudioElement | null>(null);

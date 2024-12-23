@@ -23,5 +23,6 @@ export interface CounterModel {
 
 export type TransactionModel = {
   id: string;
+  date: Date;
   orders: OrderModel[];
 };

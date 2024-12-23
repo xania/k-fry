@@ -11,7 +11,7 @@ export const queue: (
     const data = await rawBody(req);
     const orders = JSON.parse(data);
 
-    db.push({ id: Math.random().toString(), orders });
+    db.push({ id: Math.random().toString(), date: new Date(), orders });
 
     broadcaster.send(JSON.stringify(db));
 

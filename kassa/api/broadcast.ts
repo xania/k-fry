@@ -11,8 +11,6 @@ export function start(port: number, init: () => string) {
   const arr: { send(data: any): void }[] = [];
 
   wss.on("connection", (ws) => {
-    console.log("New client connected");
-
     ws.send(init());
 
     // Handle incoming messages
@@ -23,8 +21,6 @@ export function start(port: number, init: () => string) {
 
     // Handle client disconnection
     ws.on("close", () => {
-      console.log("Client disconnected");
-
       const index = arr.indexOf(ws);
       if (index >= 0) {
         arr.splice(index, 1);

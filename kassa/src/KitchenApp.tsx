@@ -93,7 +93,7 @@ const KitchenApp: Component<RouteSectionProps<unknown>> = (props) => {
   });
 
   return (
-    <div>
+    <div class="bg-slate-50">
       <h1 class="text-3xl m-auto text-center">Kitchen</h1>
 
       <div class="text-center">
@@ -111,9 +111,9 @@ const KitchenApp: Component<RouteSectionProps<unknown>> = (props) => {
         {(transaction, index) => (
           // rendering logic for each element
 
-          <div class="border-2 border-slate-300 p-2 m-2 shadow-md">
+          <div class="border-2 border-slate-300 p-3 m-4 shadow-lg bg-white">
             <button
-              class="border border-red-400 px-2 text-red-600"
+              class="border border-red-400 py-1 px-2 text-red-600"
               onClick={() => closeTransaction(transaction.id)}
             >
               Close order
@@ -123,8 +123,8 @@ const KitchenApp: Component<RouteSectionProps<unknown>> = (props) => {
             </span>
 
             {transaction.orders.map((order) => (
-              <div class="border border-red-300 my-2">
-                <h1 class="p-1 bg-slate-600 text-white">{order.description}</h1>
+              <div class="my-2">
+                <h1 class="p-1 text-slate-600">{order.description}</h1>
 
                 <div class="flex flex-wrap ">
                   {getOrderAttributes(order).map((attr) => (
@@ -135,9 +135,16 @@ const KitchenApp: Component<RouteSectionProps<unknown>> = (props) => {
                 </div>
               </div>
             ))}
+
+            {transaction.notes && (
+              <pre class="border border-yellow-300 bg-yellow-100 p-2">
+                {transaction.notes}
+              </pre>
+            )}
           </div>
         )}
       </For>
+      <div class="p-2"></div>
     </div>
   );
 };

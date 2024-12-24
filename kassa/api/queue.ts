@@ -9,9 +9,9 @@ export const queue: (
 ) => Connect.NextHandleFunction = (broadcaster, db) =>
   async function (req, res, next) {
     const data = await rawBody(req);
-    const orders = JSON.parse(data);
+    const trx = JSON.parse(data);
 
-    db.push({ id: Math.random().toString(), date: new Date(), orders });
+    db.push(trx);
 
     broadcaster.send(JSON.stringify(db));
 

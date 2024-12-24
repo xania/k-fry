@@ -11,7 +11,12 @@ import {
   For,
   Show,
 } from "solid-js";
-import { CounterModel, OrderModel, RadioModel } from "./models/order";
+import {
+  CounterModel,
+  OrderModel,
+  RadioModel,
+  TransactionModel,
+} from "./models/order";
 
 // const initialOrder: OrderModel = {
 //   description: "Burger",
@@ -22,6 +27,7 @@ import { CounterModel, OrderModel, RadioModel } from "./models/order";
 // };
 
 const [items, setItems] = createSignal<OrderModel[]>([]);
+const [notes, setNotes] = createSignal<string>("");
 
 const [selectedOrder, setSelectedOrder] = createSignal<
   OrderModel | undefined
@@ -445,6 +451,10 @@ const Checkout: Component = () => {
     setPin(parseInt(e.target.value || 0));
   }
 
+  function updateNotes(e: any) {
+    setNotes(e.target.value);
+  }
+
   createEffect(() => {
     const sum = totalAmount();
     if (sum.amount == 0) {
@@ -455,15 +465,25 @@ const Checkout: Component = () => {
   });
 
   async function checkout() {
-    await fetch("/queue", {
-      body: JSON.stringify(items()),
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-    setItems([]);
-    setSelectedOrder(undefined);
+    const orders = items();
+    if (orders.length > 0) {
+      const trans: TransactionModel = {
+        id: Math.random().toString(),
+        date: new Date(),
+        notes: notes(),
+        orders,
+      };
+      await fetch("/queue", {
+        body: JSON.stringify(trans),
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      setItems([]);
+      setNotes("");
+      setSelectedOrder(undefined);
+    }
   }
 
   return (
@@ -512,6 +532,13 @@ const Checkout: Component = () => {
         </label>
 
         <div>
+          <textarea
+            placeholder="Notes"
+            class="w-full h-32 border-2 border-blue-400 bg-yellow-100"
+            onChange={updateNotes}
+            onKeyUp={updateNotes}
+            value={notes()}
+          ></textarea>
           <button
             class="border border-slate-300 p-4 rounded-lg bg-green-700 text-white flex-1 w-full"
             onClick={checkout}

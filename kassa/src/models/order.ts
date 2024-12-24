@@ -25,4 +25,5 @@ export type TransactionModel = {
   id: string;
   date: Date;
   orders: OrderModel[];
+  notes: string;
 };

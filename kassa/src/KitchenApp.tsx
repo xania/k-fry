@@ -46,10 +46,14 @@ function enableAudio() {
 
 function playAudio() {
   const audio = getAudio();
-  if (audio)
-    audio.play().catch((error) => {
-      alert(error);
-    });
+  if (audio) {
+    audio.currentTime = 0; // Start from the beginning
+    audio.play(); // Start playing the audio
+
+    setTimeout(() => {
+      audio.pause(); // Pause the audio after 2 seconds
+    }, 2000); // 2000 milliseconds = 2 seconds
+  }
 }
 
 const ElapsedTime: Component<{ date: Date }> = (props) => {

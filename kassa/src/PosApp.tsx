@@ -70,8 +70,7 @@ const menuCategories: CategoryModel[] = [
   { name: "Burger", price: 5.95 },
   { name: "Boneless chicken", price: 5.95 },
   { name: "Hotwings", price: 5.95 },
-  // { name: "Kipstuk (3x)", price: 5 },
-  { name: "Menu dranken", price: 1 },
+  { name: "Kipstuk (3x)", price: 5 },
 ];
 
 const bowlsCategory: CategoryModel = { name: "Bowls", price: 5.45 };

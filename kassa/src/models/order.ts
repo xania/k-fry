@@ -16,6 +16,11 @@ export interface RadioModel {
   price: number;
 }
 
+export interface CheckboxModel {
+  title: string;
+  price: number;
+}
+
 export interface CounterModel {
   count: number;
   unitPrice: number;

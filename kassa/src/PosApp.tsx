@@ -12,11 +12,30 @@ import {
   Show,
 } from "solid-js";
 import {
+  CheckboxModel,
   CounterModel,
   OrderModel,
   RadioModel,
   TransactionModel,
 } from "./models/order";
+import {
+  americanStyle as americanStyle,
+  bonelessCategory,
+  bowlsCategory,
+  burgerCategory,
+  CategoryModel,
+  freeChoiceCategory,
+  frietPrice,
+  hotwingsCategory,
+  KipstukCategory,
+  koreanStyle,
+  koudeDranken,
+  frietDiscount,
+  menuFriet,
+  sauses,
+  snacks,
+  drankDiscount,
+} from "./models/product";
 
 // const initialOrder: OrderModel = {
 //   description: "Burger",
@@ -61,20 +80,12 @@ function removeItem(index: number) {
   return false;
 }
 
-interface CategoryModel {
-  name: string;
-  price: number;
-}
-
-const menuCategories: CategoryModel[] = [
-  { name: "Burger", price: 5.95 },
-  { name: "Boneless chicken", price: 5.95 },
-  { name: "Hotwings", price: 5.95 },
-  { name: "Kipstuk (3x)", price: 5 },
+const menuCategories = [
+  burgerCategory,
+  bonelessCategory,
+  hotwingsCategory,
+  // KipstukCategory,
 ];
-
-const bowlsCategory: CategoryModel = { name: "Bowls", price: 5.45 };
-const freeChoiceCategory: CategoryModel = { name: "Free Choice", price: 0 };
 
 const PosApp: Component = () => {
   return (
@@ -101,95 +112,70 @@ const PosApp: Component = () => {
             class="flex h-full flex-1 overflow-auto"
             classList={{ hidden: !selectedOrder() }}
           >
-            <Bar categories={[...menuCategories, bowlsCategory]}>
+            <Bar categories={[bowlsCategory]}>
               <Card>
-                <Header>American style</Header>
                 <Options
-                  name="style"
-                  items={[
-                    { title: "Kentucky style", price: 0 },
-                    { title: "Nashville style", price: 0 },
-                  ]}
-                ></Options>
-              </Card>
-              <Card>
-                <Header>Korean style</Header>
-                <Options
-                  name="style"
-                  items={[
-                    { title: "Gochujang", price: 1 },
-                    { title: "Honey Lemon", price: 1 },
-                    { title: "Soy Garlic", price: 1 },
-                  ]}
+                  name="vulling"
+                  items={bowlsCategory.vulling.map(discount(frietPrice))}
                 ></Options>
               </Card>
             </Bar>
             <Bar categories={[...menuCategories, bowlsCategory]}>
               <Card>
+                <Header>American style</Header>
+                <Options name="style" items={americanStyle}></Options>
+              </Card>
+              <Card>
+                <Header>Korean style</Header>
+                <Options name="style" items={koreanStyle}></Options>
+              </Card>
+            </Bar>
+            <Bar categories={[...menuCategories]}>
+              <Card>
                 <Header>Friet</Header>
                 <Options
                   name="friet"
-                  items={[
-                    { title: "Normaal", price: 2.5 },
-                    { title: "Zoete Aardappelen", price: 3 },
-                  ]}
+                  items={menuFriet.map(discount(frietDiscount))}
                 ></Options>
               </Card>
               <Card>
                 <Header>Saus</Header>
-                <Checkbox title="Mayo" price={0.6} />
-                <Checkbox title="Ketchup" price={0.6} />
-                <Checkbox title="K-Fry" price={0.9} />
-                <Checkbox title="Mexican" price={0.9} />
-                <Checkbox title="Soy Garlic" price={0.9} />
-                <Checkbox title="Honey Lemon" price={0.9} />
+                {sauses.map((saus) => (
+                  <Checkbox {...saus} />
+                ))}
               </Card>
             </Bar>
             <Bar categories={[...menuCategories, bowlsCategory]}>
               <Card>
                 <Header>Koude Dranken</Header>
-                <Checkbox title="Cola" price={1.5} />
-                <Checkbox title="Fernandes rood" price={1.5} />
-                <Checkbox title="Fernandes groen" price={1.5} />
-                <Checkbox title="Fernandes blauw" price={1.5} />
-                <Checkbox title="Redbul" price={2} />
-                <Checkbox title="Oasis Rood" price={1.5} />
-                <Checkbox title="Oasis Orange" price={1.5} />
-                <Checkbox title="Spa" price={1.5} />
+                <Options
+                  name="drank"
+                  items={koudeDranken.map(discount(drankDiscount))}
+                ></Options>
               </Card>
             </Bar>
             <Bar categories={[freeChoiceCategory]}>
               <Card>
                 <Header>Snacks</Header>
-                <Counter title="Koolsla" price={2.5} />
-                <Counter title="Friet" price={3} />
-                <Counter title="Gekruide friet" price={3.5} />
-                <Counter title="Zoete aardappelen friet" price={4} />
-                <Counter title="3x Hotwings" price={3.25} />
-                <Counter title="3x Boneless" price={3.25} />
+                {snacks.map((snack) => (
+                  <Counter {...snack} />
+                ))}
               </Card>
             </Bar>
             <Bar categories={[freeChoiceCategory]}>
               <Card>
                 <Header>Saus</Header>
-                <Counter title="Mayo" price={0.6} />
-                <Counter title="Ketchup" price={0.6} />
-                <Counter title="K-Fry" price={0.9} />
-                <Counter title="Mexican" price={0.9} />
-                <Counter title="Soy Garlic" price={0.9} />
-                <Counter title="Honey Lemon" price={0.9} />
+                {sauses.map((saus) => (
+                  <Counter {...saus} />
+                ))}
               </Card>
             </Bar>
             <Bar categories={[freeChoiceCategory]}>
               <Card>
                 <Header>Koude Dranken</Header>
-                <Counter title="Cola" price={2.5} />
-                <Counter title="Fernandes rood" price={2.5} />
-                <Counter title="Fernandes groen" price={2.5} />
-                <Counter title="Fernandes blauw" price={2.5} />
-                <Counter title="Redbul" price={3} />
-                <Counter title="Oasis Rood" price={2.5} />
-                <Counter title="Oasis Orange" price={2.5} />
+                {koudeDranken.map((drink) => (
+                  <Counter {...drink} />
+                ))}
               </Card>
             </Bar>
           </div>
@@ -342,7 +328,7 @@ const Counter: Component<{ title: string; price: number }> = (props) => {
   );
 };
 
-const Checkbox: Component<{ title: string; price: number }> = (props) => {
+const Checkbox: Component<CheckboxModel> = (props) => {
   function isChecked() {
     const order = selectedOrder();
     if (!order) return false;
@@ -555,3 +541,9 @@ function refreshItems() {
 }
 
 export default PosApp;
+
+function discount(value: number) {
+  return function <T extends { price: number }>(t: T) {
+    return { ...t, price: t.price - value };
+  };
+}

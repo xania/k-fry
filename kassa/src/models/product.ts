@@ -10,22 +10,22 @@ export interface CategoryModel {
   price: number;
 }
 
-export const burgerCategory: CategoryModel = { name: "Burgers", price: 5.95 };
+export const burgerCategory: CategoryModel = { name: "Burgers", price: 6.95 };
 export const bonelessCategory: CategoryModel = {
   name: "Boneless (bucket)",
-  price: 5.95,
+  price: 6.95,
 };
 export const hotwingsCategory: CategoryModel = {
   name: "Hotwings (bucket)",
-  price: 5.95,
+  price: 6.95,
 };
 export const KipstukCategory: CategoryModel = {
   name: "Kipstuk (bucket)",
-  price: 5,
+  price: 6,
 };
 export const bowlsCategory = {
   name: "Bowls",
-  price: 7.95,
+  price: 8.95,
   vulling: [
     { title: "Friet", price: frietPrice },
     { title: "Rijst", price: frietPrice + 1 },

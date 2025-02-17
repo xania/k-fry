@@ -10,22 +10,20 @@ export interface CategoryModel {
   price: number;
 }
 
-export const burgerCategory: CategoryModel = { name: "Burgers", price: 6.95 };
+export const burgerCategory: CategoryModel = { name: "Burgers", price: 6.99 };
+export const wrapCategory: CategoryModel = { name: "Wrap", price: 6.99 };
+export const drumsticksCategory: CategoryModel = { name: "2x Drumsticks", price: 6.99 };
 export const bonelessCategory: CategoryModel = {
-  name: "Boneless (bucket)",
-  price: 6.95,
+  name: "Boneless",
+  price: 6.99,
 };
 export const hotwingsCategory: CategoryModel = {
-  name: "Hotwings (bucket)",
-  price: 6.95,
-};
-export const KipstukCategory: CategoryModel = {
-  name: "Kipstuk (bucket)",
-  price: 6,
+  name: "Hotwings",
+  price: 6.99,
 };
 export const bowlsCategory = {
   name: "Bowls",
-  price: 8.95,
+  price: 8.99,
   vulling: [
     { title: "Friet", price: frietPrice },
     { title: "Rijst", price: frietPrice + 1 },
@@ -40,6 +38,11 @@ export const freeChoiceCategory: CategoryModel = {
 export const americanStyle: RadioModel[] = [
   { title: "Kentucky style", price: 0 },
   { title: "Nashville style", price: 0 },
+];
+
+export const grams: RadioModel[] = [
+  { title: "160g", price: 0 },
+  { title: "300g", price: 1 },
 ];
 
 export const koreanStyle: RadioModel[] = [

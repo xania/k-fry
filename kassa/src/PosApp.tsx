@@ -27,7 +27,7 @@ import {
   freeChoiceCategory,
   frietPrice,
   hotwingsCategory,
-  KipstukCategory,
+  wrapCategory,
   koreanStyle,
   koudeDranken,
   frietDiscount,
@@ -35,6 +35,8 @@ import {
   sauses,
   snacks,
   drankDiscount,
+  drumsticksCategory,
+  grams,
 } from "./models/product";
 
 // const initialOrder: OrderModel = {
@@ -82,8 +84,9 @@ function removeItem(index: number) {
 
 const menuCategories = [
   burgerCategory,
-  bonelessCategory,
   hotwingsCategory,
+  wrapCategory,
+  drumsticksCategory
   // KipstukCategory,
 ];
 
@@ -95,6 +98,7 @@ const PosApp: Component = () => {
           {menuCategories.map((cat) => (
             <Category model={cat}></Category>
           ))}
+          <Category model={bonelessCategory}></Category>
           <Category model={bowlsCategory}></Category>
           <Category model={freeChoiceCategory}></Category>
           <span class="flex-1"></span>
@@ -120,6 +124,20 @@ const PosApp: Component = () => {
                 ></Options>
               </Card>
             </Bar>
+            <Bar categories={[bonelessCategory]}>
+              <Card>
+                <Header>grams</Header>
+                <Options name="grams" items={grams}></Options>
+              </Card>
+              <Card>
+                <Header>American style</Header>
+                <Options name="style" items={americanStyle}></Options>
+              </Card>
+              <Card>
+                <Header>Korean style</Header>
+                <Options name="style" items={koreanStyle}></Options>
+              </Card>
+            </Bar>
             <Bar categories={[...menuCategories, bowlsCategory]}>
               <Card>
                 <Header>American style</Header>
@@ -130,7 +148,7 @@ const PosApp: Component = () => {
                 <Options name="style" items={koreanStyle}></Options>
               </Card>
             </Bar>
-            <Bar categories={[...menuCategories]}>
+            <Bar categories={[...menuCategories, bonelessCategory]}>
               <Card>
                 <Header>Friet</Header>
                 <Options
@@ -145,7 +163,7 @@ const PosApp: Component = () => {
                 ))}
               </Card>
             </Bar>
-            <Bar categories={[...menuCategories, bowlsCategory]}>
+            <Bar categories={[...menuCategories, bowlsCategory, bonelessCategory]}>
               <Card>
                 <Header>Koude Dranken</Header>
                 <Options

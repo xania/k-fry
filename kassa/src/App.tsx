@@ -15,6 +15,8 @@ import {
   sauses,
   snacks,
   frietDiscount,
+  wrapCategory,
+  drumsticksCategory,
 } from "./models/product";
 
 const App: Component<RouteSectionProps<unknown>> = (props) => {
@@ -57,6 +59,20 @@ const App: Component<RouteSectionProps<unknown>> = (props) => {
             <MenuScherm
               {...bowlsCategory}
               menuDiscount={drankDiscount + frietPrice}
+            />
+          </div>
+        </div>
+        <div class="flex gap-4 border  m-auto">
+          <div class="border border-black p-2 shadow-md">
+            <MenuScherm
+              {...wrapCategory}
+              menuDiscount={drankDiscount + frietDiscount}
+            />
+          </div>
+          <div class="border border-black p-2 shadow-md">
+            <MenuScherm
+              {...drumsticksCategory}
+              menuDiscount={drankDiscount + frietDiscount}
             />
           </div>
         </div>
